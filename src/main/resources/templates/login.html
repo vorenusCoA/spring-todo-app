@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+<link th:rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css} " />
+
+<style type="text/css">
+
+	.container {
+		position: absolute;
+	    left: 50%;
+	    top: 50%;
+	    -webkit-transform: translate(-50%, -50%);
+	    transform: translate(-50%, -50%);
+	    max-width: 400px;
+    }
+
+</style>
+
+</head>
+<body>
+
+	<div class="container">
+		<div class="bg-danger bg-opacity-25" th:if="${param.error}">Invalid email and password</div>
+		<div class="bg-success bg-opacity-25" th:if="${param.logout}">You have been logged out</div>
+		<form th:action="@{/login}" method="POST" >
+			<div class="mb-3">
+				<label for="email" class="form-label">Email address</label>
+				<input type="email" class="form-control" id="email" name="username">
+			</div>
+			<div class="mb-3">
+				<label for="password" class="form-label">Password</label>
+				<input type="password" class="form-control" id="password" name="password">
+			</div>
+			<div class="mb-3 form-check">
+				<input type="checkbox" class="form-check-input" id="rememberMe" name="remember-me">
+				<label class="form-check-label" for="rememberMe">Remember Me</label>
+			</div>
+			<button type="submit" class="btn btn-primary">Login</button>
+		</form>
+	</div>
+
+
+	<script th:src="@{/jQuery/jquery-3.6.0.min.js}"></script>
+	<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+
+</body>
+</html>

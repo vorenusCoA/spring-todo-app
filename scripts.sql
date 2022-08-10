@@ -1,0 +1,54 @@
+CREATE TABLE USERS (
+  id INT NOT NULL AUTO_INCREMENT,
+  email VARCHAR(50) NOT NULL,
+  password VARCHAR(100) NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE (email)
+);
+
+
+INSERT INTO USERS (email, password) VALUES ('user@test.com', '$2a$10$a07FaSKwo2xAwEj4UJYa0etu8sY5o9onG/0psQ2FxzjviueQUYnbm');
+INSERT INTO USERS (email, password) VALUES ('admin@test.com', '$2a$10$a07FaSKwo2xAwEj4UJYa0etu8sY5o9onG/0psQ2FxzjviueQUYnbm');
+
+
+CREATE TABLE ACTIVITIES (
+  id INT NOT NULL AUTO_INCREMENT,
+  user_id INT NOT NULL,
+  description VARCHAR(50) NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (user_id) REFERENCES USERS(id)
+);
+
+
+CREATE TABLE AUTHORITIES (
+  id INT NOT NULL AUTO_INCREMENT,
+  authority VARCHAR(50) NOT NULL,
+  PRIMARY KEY (id)
+);
+
+INSERT INTO AUTHORITIES (authority) VALUES ('USER');
+INSERT INTO AUTHORITIES (authority) VALUES ('ADMIN');
+
+CREATE TABLE USERS_AUTHORITIES (
+  id INT NOT NULL AUTO_INCREMENT,
+  user_id INT NOT NULL,
+  authority_id INT NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (user_id) REFERENCES USERS(id),
+  FOREIGN KEY (authority_id) REFERENCES AUTHORITIES(id)
+);
+
+CREATE UNIQUE INDEX ix_user
+  on USERS_AUTHORITIES (user_id);
+
+
+INSERT INTO USERS_AUTHORITIES (user_id, authority_id) VALUES (1, 1);
+INSERT INTO USERS_AUTHORITIES (user_id, authority_id) VALUES (2, 2);
+  
+
+CREATE TABLE persistent_logins ( 
+  username VARCHAR(100) NOT NULL, 
+  series VARCHAR(64) PRIMARY KEY, 
+  token VARCHAR(64) NOT NULL, 
+  last_used TIMESTAMP NOT NULL 
+);
