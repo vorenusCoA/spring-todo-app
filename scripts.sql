@@ -1,5 +1,5 @@
 CREATE TABLE USERS (
-  id INT NOT NULL AUTO_INCREMENT,
+  id BINARY(16) NOT NULL,
   email VARCHAR(50) NOT NULL,
   password VARCHAR(100) NOT NULL,
   PRIMARY KEY (id),
@@ -7,32 +7,33 @@ CREATE TABLE USERS (
 );
 
 
-INSERT INTO USERS (email, password) VALUES ('user@test.com', '$2a$10$a07FaSKwo2xAwEj4UJYa0etu8sY5o9onG/0psQ2FxzjviueQUYnbm');
-INSERT INTO USERS (email, password) VALUES ('admin@test.com', '$2a$10$a07FaSKwo2xAwEj4UJYa0etu8sY5o9onG/0psQ2FxzjviueQUYnbm');
+INSERT INTO USERS (id, email, password) VALUES (unhex(replace(uuid(), '-', '')), 'user@test.com', '$2a$10$a07FaSKwo2xAwEj4UJYa0etu8sY5o9onG/0psQ2FxzjviueQUYnbm');
+INSERT INTO USERS (id, email, password) VALUES (unhex(replace(uuid(), '-', '')), 'admin@test.com', '$2a$10$a07FaSKwo2xAwEj4UJYa0etu8sY5o9onG/0psQ2FxzjviueQUYnbm');
 
 
 CREATE TABLE ACTIVITIES (
-  id INT NOT NULL AUTO_INCREMENT,
-  user_id INT NOT NULL,
+  id BINARY(16) NOT NULL,
+  user_id BINARY(16) NOT NULL,
   description VARCHAR(50) NOT NULL,
+  created_at TIMESTAMP NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (user_id) REFERENCES USERS(id)
 );
 
 
 CREATE TABLE AUTHORITIES (
-  id INT NOT NULL AUTO_INCREMENT,
+  id BINARY(16) NOT NULL,
   authority VARCHAR(50) NOT NULL,
   PRIMARY KEY (id)
 );
 
-INSERT INTO AUTHORITIES (authority) VALUES ('USER');
-INSERT INTO AUTHORITIES (authority) VALUES ('ADMIN');
+INSERT INTO AUTHORITIES (id, authority) VALUES (unhex(replace(UUID(), '-', '')), 'USER');
+INSERT INTO AUTHORITIES (id, authority) VALUES (unhex(replace(UUID(), '-', '')), 'ADMIN');
 
 CREATE TABLE USERS_AUTHORITIES (
-  id INT NOT NULL AUTO_INCREMENT,
-  user_id INT NOT NULL,
-  authority_id INT NOT NULL,
+  id BINARY(16) NOT NULL,
+  user_id BINARY(16) NOT NULL,
+  authority_id BINARY(16) NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (user_id) REFERENCES USERS(id),
   FOREIGN KEY (authority_id) REFERENCES AUTHORITIES(id)
@@ -42,8 +43,13 @@ CREATE UNIQUE INDEX ix_user
   on USERS_AUTHORITIES (user_id);
 
 
-INSERT INTO USERS_AUTHORITIES (user_id, authority_id) VALUES (1, 1);
-INSERT INTO USERS_AUTHORITIES (user_id, authority_id) VALUES (2, 2);
+SELECT @user1 := id FROM USERS WHERE email = "user@test.com";
+SELECT @user2 := id FROM USERS WHERE email = "admin@test.com";
+SELECT @role1 := id FROM AUTHORITIES WHERE authority = "USER";
+SELECT @role2 := id FROM AUTHORITIES WHERE authority = "ADMIN";
+  
+INSERT INTO USERS_AUTHORITIES (id, user_id, authority_id) VALUES (unhex(replace(UUID(), '-', '')), @user1, @role1);
+INSERT INTO USERS_AUTHORITIES (id, user_id, authority_id) VALUES (unhex(replace(UUID(), '-', '')), @user2, @role2);
   
 
 CREATE TABLE persistent_logins ( 

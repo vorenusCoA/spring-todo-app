@@ -20,13 +20,12 @@
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Description</th>
-                <th scope="col">Edit</th>
                 <th scope="col">Delete</th>
             </tr>
         </thead>
         <tbody>
             <tr th:each="activity: ${activities}">
-                <td th:text="${activity.id}" />
+                <td th:text="${activity.order}" />
                 <td th:text="${activity.description}" />
                 <td>
                     <button type="button" th:attr="data-bs-activity-id=${activity.id}" class="btn btn-danger btn-sm" onclick="openDeleteActivityModal(event)">
@@ -51,15 +50,15 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="activity-form" th:action="@{/activities}" th:object="${activity}" method="post">
+                    <form id="activity-form" th:action="@{/activities}" method="post">
                         <label th:for="description">Description</label>
-                        <input type="text" th:field="*{description}" autofocus onfocus="resetBackground()" />
+                        <input type="text" onfocus="resetBackground()" name="description" />
 
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="buton" onclick="validateForm()" class="btn btn-primary">Save</button>
+                    <button type="button" onclick="validateForm()" class="btn btn-primary">Save</button>
                 </div>
             </div>
         </div>

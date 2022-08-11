@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.example.todo.model.CustomUserDetails;
 import com.example.todo.model.User;
 import com.example.todo.repository.ActivityRepository;
 import com.example.todo.repository.UserRepository;
@@ -20,16 +21,8 @@ public class UserService implements UserDetailsService {
 		this.userRepository = userRepository;
 	}
 	
-	public Optional<User> findByEmail(String email) {
-		return userRepository.findByEmail(email);
-	}
-	
 	public Optional<User> findByEmailAndFetchAuthorities(String email) {
 		return userRepository.findByEmailAndFetchAuthorities(email);
-	}
-	
-	public Optional<User> findByEmailAndFetchActivities(String email) {
-		return userRepository.findByEmailAndFetchActivities(email);
 	}
 
 	@Override
@@ -40,8 +33,13 @@ public class UserService implements UserDetailsService {
 		if (optUser.isEmpty()) {
 			throw new UsernameNotFoundException("User with email: " + email +" not found");
 		}
+		User user = optUser.get();
+		CustomUserDetails principal = new CustomUserDetails(user.getEmail(),
+															user.getPassword(),
+															user.getId(),
+															user.getAuthorities());
 		
-		return optUser.get();
+		return principal;
 	}
 	
 }
