@@ -28,7 +28,7 @@
                 <td th:text="${activity.order}" />
                 <td th:text="${activity.description}" />
                 <td>
-                    <button type="button" th:attr="data-bs-activity-id=${activity.id}" class="btn btn-danger btn-sm" onclick="openDeleteActivityModal(event)">
+                    <button type="button" th:attr="data-bs-activity-id=${activity.id}, data-bs-activity-description=${activity.description}" class="btn btn-danger btn-sm" onclick="openDeleteActivityModal(event)">
                         <img src="/icons/trash-2.svg">
                     </button>
                 </td>
@@ -52,7 +52,7 @@
                 <div class="modal-body">
                     <form id="activity-form" th:action="@{/activities}" method="post">
                         <label th:for="description">Description</label>
-                        <input type="text" onfocus="resetBackground()" name="description" />
+                        <input id="description" type="text" onfocus="resetBackground()" name="description" />
 
                     </form>
                 </div>
@@ -75,8 +75,8 @@
                 <div class="modal-body">
                     <p>Are you sure you want to delete this item?</p>
                     <form id="delete-activity-form" th:action="@{/activities/{id}(id='_id_')}" th:method="delete">
-                        <label th:for="description">Id</label>
-                        <input type="text" id="id"/>
+                        <p id="descriptionOutput"><p>
+                        <input hidden="true" id="id" name="id" />
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -91,6 +91,10 @@
     <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
 
     <script>
+    
+    	$('#addActivityModal').on('shown.bs.modal', function () {
+    	  $('#description').trigger('focus')
+    	})
 
         function validateForm() {
             var description = document.getElementById("description");
@@ -119,10 +123,13 @@
 
             // Extract info from data-bs-* attributes
             var activityId = button.getAttribute("data-bs-activity-id");
+            var activityDescription = button.getAttribute("data-bs-activity-description");
 
             // Update the modal's content.
             var idInput = deleteActivityModal.querySelector("#id");
             idInput.value = activityId;
+            var descriptionOutput = deleteActivityModal.querySelector("#descriptionOutput");
+            descriptionOutput.textContent = activityDescription;
             var action = deleteActivityModal.querySelector("#delete-activity-form");
             var actionAttribute = action.getAttribute("action").replace("_id_", activityId);
             action.setAttribute("action", actionAttribute);
