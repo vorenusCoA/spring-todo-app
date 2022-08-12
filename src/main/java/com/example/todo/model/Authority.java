@@ -25,14 +25,14 @@ public class Authority implements GrantedAuthority {
     @Column(columnDefinition = "BINARY(16)")
 	private UUID id;
 	
-	private String authority;
+	private String role;
 	
 	@ManyToMany
 	private Set<User> users;
 
 	@Override
 	public String getAuthority() {
-		return authority;
+		return role;
 	}
 
 

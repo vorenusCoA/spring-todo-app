@@ -9,6 +9,6 @@ import com.example.todo.model.Activity;
 
 public interface ActivityRepository extends JpaRepository<Activity, UUID> {
 
-	List<Activity> findByUserId(UUID userId);
+	List<Activity> findByUserIdOrderByCreatedAtAsc(UUID userId);
 
 }

@@ -23,12 +23,12 @@ CREATE TABLE ACTIVITIES (
 
 CREATE TABLE AUTHORITIES (
   id BINARY(16) NOT NULL,
-  authority VARCHAR(50) NOT NULL,
+  role VARCHAR(50) NOT NULL,
   PRIMARY KEY (id)
 );
 
-INSERT INTO AUTHORITIES (id, authority) VALUES (unhex(replace(UUID(), '-', '')), 'USER');
-INSERT INTO AUTHORITIES (id, authority) VALUES (unhex(replace(UUID(), '-', '')), 'ADMIN');
+INSERT INTO AUTHORITIES (id, role) VALUES (unhex(replace(UUID(), '-', '')), 'USER');
+INSERT INTO AUTHORITIES (id, role) VALUES (unhex(replace(UUID(), '-', '')), 'ADMIN');
 
 CREATE TABLE USERS_AUTHORITIES (
   id BINARY(16) NOT NULL,
@@ -45,8 +45,8 @@ CREATE UNIQUE INDEX ix_user
 
 SELECT @user1 := id FROM USERS WHERE email = "user@test.com";
 SELECT @user2 := id FROM USERS WHERE email = "admin@test.com";
-SELECT @role1 := id FROM AUTHORITIES WHERE authority = "USER";
-SELECT @role2 := id FROM AUTHORITIES WHERE authority = "ADMIN";
+SELECT @role1 := id FROM AUTHORITIES WHERE role = "USER";
+SELECT @role2 := id FROM AUTHORITIES WHERE role = "ADMIN";
   
 INSERT INTO USERS_AUTHORITIES (id, user_id, authority_id) VALUES (unhex(replace(UUID(), '-', '')), @user1, @role1);
 INSERT INTO USERS_AUTHORITIES (id, user_id, authority_id) VALUES (unhex(replace(UUID(), '-', '')), @user2, @role2);

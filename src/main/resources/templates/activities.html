@@ -24,8 +24,8 @@
             </tr>
         </thead>
         <tbody>
-            <tr th:each="activity: ${activities}">
-                <td th:text="${activity.order}" />
+            <tr th:each="activity, iterStat : ${activities}">
+                <td th:text="${iterStat.count}" />
                 <td th:text="${activity.description}" />
                 <td>
                     <button type="button" th:attr="data-bs-activity-id=${activity.id}, data-bs-activity-description=${activity.description}" class="btn btn-danger btn-sm" onclick="openDeleteActivityModal(event)">

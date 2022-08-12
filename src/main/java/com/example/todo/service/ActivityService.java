@@ -1,9 +1,7 @@
 package com.example.todo.service;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -27,21 +25,8 @@ public class ActivityService {
         activityRepository.deleteById(id);
     }
 
-	public List<Activity> findByUserId(UUID userId) {
-		return activityRepository.findByUserId(userId);
-	}
-	
-	public List<Activity> sortAndSetOrder(List<Activity> activities) {
-		
-		List<Activity> sortedActivities = activities.stream()
-				   			   						.sorted(Comparator.comparing(Activity::getCreatedAt))
-				   			   						.collect(Collectors.toList());
-
-		for (int i = 0; i < sortedActivities.size(); i++) {
-			sortedActivities.get(i).setOrder(i + 1);
-		}
-		
-		return sortedActivities;
+	public List<Activity> findByUserIdOrderByCreatedAtAsc(UUID userId) {
+		return activityRepository.findByUserIdOrderByCreatedAtAsc(userId);
 	}
 
 }

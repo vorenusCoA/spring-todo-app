@@ -11,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -31,19 +30,12 @@ public class Activity {
     
     @Column(name = "created_at")
     private Timestamp createdAt;
-    
-    @Transient
-    private Integer order;
 
     @ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="user_id", nullable = false)
     private User user;
     
     public Activity() {}
-    
-    public Activity(User user) {
-		this.user = user;
-	}
 
 	public UUID getId() {
         return id;
@@ -69,13 +61,13 @@ public class Activity {
 		this.createdAt = createdAt;
 	}
 
-	public Integer getOrder() {
-		return order;
+	public User getUser() {
+		return user;
 	}
 
-	public void setOrder(Integer order) {
-		this.order = order;
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
-    
+	    
 }

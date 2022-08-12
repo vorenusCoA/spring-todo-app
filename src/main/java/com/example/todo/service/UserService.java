@@ -1,6 +1,7 @@
 package com.example.todo.service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.todo.model.CustomUserDetails;
 import com.example.todo.model.User;
-import com.example.todo.repository.ActivityRepository;
 import com.example.todo.repository.UserRepository;
 
 @Service
@@ -17,12 +17,16 @@ public class UserService implements UserDetailsService {
 
 	private final UserRepository userRepository;
 	
-	public UserService(UserRepository userRepository, ActivityRepository activityRepository) {
+	public UserService(UserRepository userRepository) {
 		this.userRepository = userRepository;
 	}
 	
 	public Optional<User> findByEmailAndFetchAuthorities(String email) {
 		return userRepository.findByEmailAndFetchAuthorities(email);
+	}
+	
+	public User getReferenceById(UUID id) {
+		return userRepository.getReferenceById(id);
 	}
 
 	@Override

@@ -18,38 +18,40 @@ import com.example.todo.model.Activity;
 import com.example.todo.model.CustomUserDetails;
 import com.example.todo.model.User;
 import com.example.todo.service.ActivityService;
+import com.example.todo.service.UserService;
 
 
 @Controller
 public class ActivityController {
 
     private final ActivityService activityService;
+    private final UserService userService;
 
-    public ActivityController(ActivityService activityService) {
+    public ActivityController(ActivityService activityService, UserService userService) {
         this.activityService = activityService;
+        this.userService = userService;
     }
 
     @GetMapping("/activities")
     public String findAll(@AuthenticationPrincipal CustomUserDetails currentUser, Model model) {
     	    	
-    	List<Activity> activities = activityService.findByUserId(currentUser.getUserId());
-    	
-    	List<Activity> sortedActivities = activityService.sortAndSetOrder(activities);
-    	    	
+    	List<Activity> sortedActivities = activityService.findByUserIdOrderByCreatedAtAsc(currentUser.getUserId());
+    	    	    	
         model.addAttribute("activities", sortedActivities);
         return "activities";
     }
 
     @PostMapping("/activities")
-    public String save(@RequestParam String description, @AuthenticationPrincipal CustomUserDetails currentUser) {
+    public String save(@RequestParam String description, @AuthenticationPrincipal CustomUserDetails currentUser, Activity activity) {
     	
-    	User dummyUser = new User();
-    	dummyUser.setId(currentUser.getUserId());
+    	User user = userService.getReferenceById(currentUser.getUserId());
     	
-    	Activity activity = new Activity(dummyUser);
+    	activity.setUser(user);
     	activity.setDescription(description);
         activity.setCreatedAt(Timestamp.from(Instant.now()));
+        
         activityService.save(activity);
+        
         return "redirect:/activities";
     }
 
