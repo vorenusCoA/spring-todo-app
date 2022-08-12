@@ -57,7 +57,7 @@ public class ActivityController {
 
     @DeleteMapping("/activities/{id}")
     public String delete(@PathVariable("id") UUID id) {    	
-        activityService.delete(id);
+        activityService.deleteById(id);
         return "redirect:/activities";
     }
 

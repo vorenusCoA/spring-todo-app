@@ -21,7 +21,7 @@ public class ActivityService {
         return activityRepository.save(activity);
     }
 
-    public void delete(UUID id) {
+    public void deleteById(UUID id) {
         activityRepository.deleteById(id);
     }
 
