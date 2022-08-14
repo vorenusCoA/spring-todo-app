@@ -50,9 +50,9 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="activity-form" th:action="@{/activities}" method="post">
+                    <form id="activity-form" th:action="@{/activities}" th:object="${activity}" method="post">
                         <label th:for="description">Description</label>
-                        <input id="description" type="text" onfocus="resetBackground()" name="description" />
+                        <input th:field="*{description}" type="text" onfocus="resetBackground()" />
 
                     </form>
                 </div>
