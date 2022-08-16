@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Activation</title>
+<link th:rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css} " />
+
+<style type="text/css">
+
+	.container {
+		position: absolute;
+	    left: 50%;
+	    top: 50%;
+	    -webkit-transform: translate(-50%, -50%);
+	    transform: translate(-50%, -50%);
+	    max-width: 400px;
+    }
+
+</style>
+
+</head>
+<body>
+
+	<div class="container">
+		<p class="alert alert-success" role="alert">
+			Your account has been activated
+		</p>
+		<a href="/login" class="btn btn-primary" role="button">Back to Login</a>
+	</div>
+
+
+	<script th:src="@{/jQuery/jquery-3.6.0.min.js}"></script>
+	<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+
+</body>
+</html>

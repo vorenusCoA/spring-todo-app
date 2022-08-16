@@ -1,10 +1,12 @@
 package com.example.todo.model;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
@@ -18,6 +20,8 @@ import org.springframework.security.core.GrantedAuthority;
 public class Authority implements GrantedAuthority {
 
 	private static final long serialVersionUID = 1L;
+	
+	public static final String DEFAULT_ROLE = "USER";
 
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -27,13 +31,23 @@ public class Authority implements GrantedAuthority {
 	
 	private String role;
 	
-	@ManyToMany
-	private Set<User> users;
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "authorities")
+	private Set<User> users = new HashSet<>();
 
 	@Override
 	public String getAuthority() {
 		return role;
 	}
+	
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	public Set<User> getUsers() {
+		return users;
+	}
+	
+	
 
 
 }

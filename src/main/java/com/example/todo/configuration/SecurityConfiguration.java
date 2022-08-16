@@ -50,7 +50,11 @@ public class SecurityConfiguration {
 	
     @Bean
     WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().antMatchers("/bootstrap/css/**", "/bootstrap/js/**", "/jQuery/**");
+        return (web) -> web.ignoring().antMatchers("/bootstrap/css/**",
+        											"/bootstrap/js/**",
+        											"/jQuery/**",
+        											"/register",
+        											"/activate");
     }
 	
 

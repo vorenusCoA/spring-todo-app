@@ -15,13 +15,14 @@ public class CustomUserDetails implements UserDetails {
 	private String password;
 	private UUID userId;
 	private Set<Authority> authorities;
+	private boolean isEnabled;
 	
-	public CustomUserDetails(String username, String password, UUID userID, Set<Authority> authorities) {
-		super();
+	public CustomUserDetails(String username, String password, UUID userID, Set<Authority> authorities, boolean isEnabled) {
 		this.username = username;
 		this.password = password;
 		this.userId = userID;
 		this.authorities = authorities;
+		this.isEnabled = isEnabled;
 	}
 
 	public UUID getUserId() {
@@ -60,7 +61,7 @@ public class CustomUserDetails implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-		return true;
+		return isEnabled;
 	}
 
 }
