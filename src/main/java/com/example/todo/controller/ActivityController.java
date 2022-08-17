@@ -3,6 +3,7 @@ package com.example.todo.controller;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.server.ResponseStatusException;
 
+import com.example.todo.exception.IllegalActivityDeletionAttempt;
 import com.example.todo.model.Activity;
 import com.example.todo.model.CustomUserDetails;
 import com.example.todo.service.ActivityService;
@@ -54,8 +57,14 @@ public class ActivityController {
     }
 
     @DeleteMapping("/activities/{id}")
-    public String delete(@PathVariable("id") UUID id) {    	
-        activityService.deleteById(id);
+    public String delete(@PathVariable("id") UUID id, @AuthenticationPrincipal CustomUserDetails currentUser) {
+    	
+        try {
+			activityService.deleteById(id, currentUser.getUserId());
+		} catch (IllegalActivityDeletionAttempt e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+		}
+        
         return "redirect:/activities";
     }
 
