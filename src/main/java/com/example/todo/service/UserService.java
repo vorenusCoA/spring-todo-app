@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.todo.mapper.UserMapper;
@@ -24,12 +25,14 @@ public class UserService implements UserDetailsService {
 	private final VerificationTokenRepository verificationTokenRepository;
 	private final UserMapper userMapper;
 	private final NotificationService notificationService;
+	private final PasswordEncoder encoder;
 		
-	public UserService(UserRepository userRepository, VerificationTokenRepository verificationTokenRepository, UserMapper userMapper, NotificationService notificationService) {
+	public UserService(UserRepository userRepository, VerificationTokenRepository verificationTokenRepository, UserMapper userMapper, NotificationService notificationService, PasswordEncoder encoder) {
 		this.userRepository = userRepository;
 		this.verificationTokenRepository = verificationTokenRepository;
 		this.userMapper = userMapper;
 		this.notificationService = notificationService;
+		this.encoder = encoder;
 	}
 	
 	public Optional<User> findByEmailAndFetchAuthorities(String email) {
@@ -68,7 +71,7 @@ public class UserService implements UserDetailsService {
 
 		// Async functionality
 		// TODO what happens if this goes wrong?
-		notificationService.sendActivationEmail(user);
+		notificationService.sendActivationEmail(user.getEmail());
 
 		return user;
 	}
@@ -90,6 +93,27 @@ public class UserService implements UserDetailsService {
 			// TODO not happy path
 
 		}
+	}
+	
+	public void resetPassword(String token, String newPassword) {
+		
+		VerificationToken verificationToken = verificationTokenRepository.findByToken(token);
+
+		if (verificationToken.getExpiryDate().after(new Date())) {
+
+			User user = userRepository.findByEmail(verificationToken.getEmail()).get();
+			
+			user.setPassword(encoder.encode(newPassword));
+
+			userRepository.save(user);
+			verificationTokenRepository.delete(verificationToken);
+
+		} else {
+
+			// TODO not happy path
+
+		}
+		
 	}
 
 }

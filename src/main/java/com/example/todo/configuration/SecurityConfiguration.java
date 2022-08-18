@@ -54,7 +54,9 @@ public class SecurityConfiguration {
         											"/bootstrap/js/**",
         											"/jQuery/**",
         											"/register",
-        											"/activate");
+        											"/activate",
+        											"/password",
+        											"/password-reset");
     }
 	
 

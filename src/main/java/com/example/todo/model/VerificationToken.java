@@ -16,7 +16,8 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name = "VERIFICATION_TOKENS")
 public class VerificationToken {
 
-	public static final int EXPIRATION = 60 * 24;
+	public static final int EXPIRATION_FOR_ACCOUNT_ACTIVATION = 60 * 24;
+	public static final int EXPIRATION_FOR_PASSWORD_RESET = 30;
 
     @Id
     @GeneratedValue(generator = "uuid2")
