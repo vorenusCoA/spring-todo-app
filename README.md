@@ -3,13 +3,13 @@ Just another TODO App but using Spring MVC and Spring Security.
 
 You can add an delete activities, register users and reset your password
 
-Prerequisites:
+## Prerequisites:
  - [Docker](https://docs.docker.com/get-docker/)
  - [Java 17](https://www.azul.com/downloads/?package=jdk)
  - MySQL Client (i.e [HeidiSQL](https://www.heidisql.com/download.php))
  - SMTP Server (if you want to test the User Registration or Forgot Password functionalities). [Sendinblue](https://www.sendinblue.com/) is free and easy to configure
 
-To try it locally:
+## To try it locally:
 - Clone the repo
 - If you want to test the User Registration and/or Forgot Password functionalitites you need to add the connection properties to your SMTP server into the "application.properties" file. For Sendinblue would be something like this:
 
