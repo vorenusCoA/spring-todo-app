@@ -39,6 +39,10 @@ public class UserService implements UserDetailsService {
 		return userRepository.findByEmailAndFetchAuthorities(email);
 	}
 	
+	public Optional<User> findByEmail(String email) {
+		return userRepository.findByEmail(email);
+	}
+	
 	public User getReferenceById(UUID id) {
 		return userRepository.getReferenceById(id);
 	}
@@ -63,14 +67,11 @@ public class UserService implements UserDetailsService {
 	
 	public User registerUser(UserCreationDTO userCreationDTO) {
 
-		// TODO validations
-
 		User user = userMapper.toUser(userCreationDTO);
 		
 		user = userRepository.save(user);
 
 		// Async functionality
-		// TODO what happens if this goes wrong?
 		notificationService.sendActivationEmail(user.getEmail());
 
 		return user;
@@ -88,10 +89,6 @@ public class UserService implements UserDetailsService {
 			userRepository.save(user);
 			verificationTokenRepository.delete(verificationToken);
 
-		} else {
-
-			// TODO not happy path
-
 		}
 	}
 	
@@ -107,10 +104,6 @@ public class UserService implements UserDetailsService {
 
 			userRepository.save(user);
 			verificationTokenRepository.delete(verificationToken);
-
-		} else {
-
-			// TODO not happy path
 
 		}
 		

@@ -1,5 +1,6 @@
 package com.example.todo.service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.mail.SimpleMailMessage;
@@ -7,7 +8,9 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import com.example.todo.model.User;
 import com.example.todo.model.VerificationToken;
+import com.example.todo.repository.UserRepository;
 import com.example.todo.repository.VerificationTokenRepository;
 
 @Service
@@ -17,10 +20,12 @@ public class NotificationService {
 	
 	private final VerificationTokenRepository verificationTokenRepository;
 	private final JavaMailSender mailSender;
+	private final UserRepository userRepository;
 	
-	public NotificationService(VerificationTokenRepository verificationTokenRepository, JavaMailSender mailSender) {
+	public NotificationService(VerificationTokenRepository verificationTokenRepository, JavaMailSender mailSender, UserRepository userRepository) {
 		this.verificationTokenRepository = verificationTokenRepository;
 		this.mailSender = mailSender;
+		this.userRepository = userRepository;
 	}
 
 	@Async
@@ -38,6 +43,12 @@ public class NotificationService {
 	
 	@Async
 	public void sendPasswordResetEmail(String emailAddress) {
+		
+		// If the email is not in the DB, do nothing
+		Optional<User> user = userRepository.findByEmail(emailAddress);
+		if (user.isEmpty()) {
+			return;
+		}
 
 		String token = UUID.randomUUID().toString();
 		createVerificationToken(emailAddress, token, VerificationToken.EXPIRATION_FOR_PASSWORD_RESET);

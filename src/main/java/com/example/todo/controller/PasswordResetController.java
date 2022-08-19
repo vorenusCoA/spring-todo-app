@@ -32,9 +32,7 @@ public class PasswordResetController {
 	
 	@PostMapping("/password")
 	public String initiatePasswordReset(@RequestParam("email") String email) {
-		
-		// TODO validations
-		
+				
 		notificationService.sendPasswordResetEmail(email);
 		
 		return "redirect:/password?success=true";
